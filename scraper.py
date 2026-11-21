@@ -73,7 +73,7 @@ def save_to_excel(items: list[dict], filename: str = "dynamic_export.xlsx") -> N
 
     headers = ["Автор", "Цитата", "Теги"]
     ws.append(headers)
-    for cell in ws:
+    for cell in ws[1]:
         cell.font = Font(bold=True)
 
     for item in items:
@@ -81,13 +81,13 @@ def save_to_excel(items: list[dict], filename: str = "dynamic_export.xlsx") -> N
 
     for col in ws.columns:
         max_len = max(len(str(c.value or "")) for c in col)
-        ws.column_dimensions[col.column_letter].width = min(max_len + 4, 70)
+        ws.column_dimensions[col[0].column_letter].width = min(max_len + 4, 70)
 
     wb.save(filename)
 
 
 async def main() -> None:
-    url = "https://toscrape.com"
+    url = "https://quotes.toscrape.com/js/"
     print(f"[*] Запуск headless-браузера для: {url}")
     data = await scrape_dynamic_quotes(url, max_pages=3)
     save_to_excel(data)
